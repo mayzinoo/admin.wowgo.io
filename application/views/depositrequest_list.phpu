@@ -1,0 +1,114 @@
+<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 mid_top_padding">
+	<div class="breadcome-list">
+		<div class="product-status-wrap bankinfo">
+		<h5 class="mid_bottom_padding">Deposit Request List</h5>
+		<table class="table table-responsive">
+			<tr>
+				<th>#</th>
+				<th>Username</th>
+				<th>Currency</th>
+				<th>Amount</th>
+				<th>Value in WoW</th>
+				<th>Current Balance</th>
+				<th>Depositor's Name</th>
+				<th>Requested Date</th>
+				<th>Action</th>
+			</tr>
+			<tbody>
+			<?php 
+				$i=1;
+				foreach($depositrequest->result() as $row): ?>
+				<tr>
+			
+					<td><?php echo $i; ?></td>
+					<td><?php echo $row->username; ?></td>
+					<td><?php echo $row->currency_type; ?></td>
+					<td><?php echo $row->currency_amount; ?></td>
+					<td><?php echo $row->amt; ?></td>
+					<td><?php echo $row->bal;?></td>
+					<td><?php echo $row->owner_name; ?></td>
+					<td><?php echo $row->created; ?></td>
+					
+	<?php if($row->status==1){ ?>
+	
+	<td style="line-height:2rem"> 	<p style="color:#57da3e;font-weight:bold;">Success</p></td>
+	<?php }else if($row->status==2) { ?>
+		<td style="line-height:2rem"><p style="color:#f90606;font-weight:bold;">Cancelled</p></td>
+	<?php }else if($row->currency_type=="ETH") { ?>
+		<td style="height:49px"><a href="Admin/editwow/<?php echo $row->id; ?>" class="btn btn-success">Request Edit</a></td>
+	<?php }else{ ?>
+<td style="line-height:1rem"><button onclick="confirmdeposit('<?=$row->id?>','<?=$row->user_id?>','<?=$row->amt?>','<?=$row->bal?>','<?=$row->currency_type?>')" style="padding: 6px 12px;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;" id="txtchg<?=$row->id?>">Confirm
+<button onclick="canceldeposit('<?=$row->id?>','<?=$row->user_id?>','<?=$row->amt?>','<?=$row->bal?>','<?=$row->currency_type?>')" style="margin-left:10px;padding: 6px 12px;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #ff0000;
+    border-color:#ff0000;" class="btn-side" id="txtcancel<?=$row->id?>">Cancel</td>
+	<?php	} ?>
+					</td>
+				</tr>
+			<?php 
+				$i++;
+				endforeach;
+			?>
+			</tbody>
+		</table>
+		</div>
+	</div>
+</div>
+
+
+	<script>
+		function confirmdeposit(id,userid,wow,bal,curtype){
+		
+		var r = confirm("Are You Sure ?");
+		var type=curtype;
+
+if (r == true) {	
+
+		$.ajax({
+			
+			type: "POST",
+			url: '<?=base_url()?>'+"Admin/depositrequest_confirm",
+			data: {id:id,userid:userid,wow:wow,bal:bal},
+			
+			success: function(e)
+			{		
+				alert(e);
+			//	$("#txtchg"+id).prop("onclick",null).off("click").html("Success");
+			//	$("#txtchg"+id).css({"color": "#57da3e","cursor":"auto","font-weight":"bold"});
+				$("#txtchg"+id).css({"display":"none"});
+				$("#txtcancel"+id).css({"display":"none"});
+				location.reload(); 
+			}
+			});
+		}
+else{
+
+	
+}
+		}
+		function canceldeposit(id,userid,wow,bal,curtype){
+
+		var r=confirm("Are You Sure to cancel ?");
+		if(r==true)
+			{
+			$.ajax({
+				type:"POST",
+				url:'<?=base_url()?>'+"Admin/depositrequest_cancel",
+				data: {id:id,userid:userid,wow:wow,bal:bal},
+				success: function (e)
+					{
+				//	$("#txtcancel"+id).prop("onclick",null).off("clcick").html("Cancelled");
+				//	$("#txtcancel"+id).css({"color":"#f90606","cursor":"auto","font-weight":"bold"});
+					$("#txtcancel"+id).css({"display":"none"});
+					$("#txtchg"+id).css({"display":"none"});
+					location.reload(); 
+					}
+				});
+			}
+		}
+	</script>

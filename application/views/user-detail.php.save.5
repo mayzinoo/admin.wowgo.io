@@ -1,0 +1,549 @@
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mid_top_padding">
+    <div class="breadcome-list">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="product-status-wrap">
+                    <div class="col-md-4">
+                        <h5>User Detail</h5>
+                        <div class="userdetail">
+                            <table>
+                                <tr>
+                                    <td>ID</td>
+                                    <td><?php echo $userdata->userid; ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Name</td>
+                                    <td><?php echo $userdata->username; ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td><?php echo $userdata->email; ?></td>
+                                </tr>
+                             
+                                <tr>
+                                    <td>Referral System</td>
+                                    <td>
+                                        <?php if($userdata->referral=="yes") { ?>
+                                        <button class="btn btn-success btn-xs"> on </button>
+                                        <?php }else{ ?>
+                    No
+                    <?php } ?>
+                                    </td>
+                                </tr> 
+                                <tr>
+                                    <td>Commission Rate</td>
+                                    <td><?php echo $userdata->rate; ?></td>
+                                </tr>
+                <tr>
+                    <td>User Action</td>
+                <?php if($userdata->user_status == "block") { ?>
+                    <td><p style="color:red">Block</p></td>
+                <?php }else if($userdata->user_status == "active"){ ?>
+                    <td><p style="color:yellow">Active</p></td>
+                <?php } ?>
+                </tr>
+                <tr>
+                <td>Deposit</td>
+                <td><?php echo $deposit->deposit; ?></td>
+                </tr>                                     
+                <tr>
+                <td>Withdraws</td>
+                <td>
+		<?php if($userdata->status=='2' || $userdata->status=='0'){ ?>
+			-
+		<?php	}else{ ?>
+			<?php echo $withdraw->withdraw; ?>
+		<?php	} ?>
+		</td>
+                </tr>
+                
+                <tr>    
+                    <td>Net Profit</td>
+                    <td><?php echo $netprofit->netprofit; ?></td>
+                </tr>
+		<tr>
+			<td>Balance</td>
+			<td><?php echo $userdata->balance; ?></td>
+		</tr>
+		<tr>
+			<td>Change Password</td>
+			<td><a href="Admin/userpwd_change/<?php echo $this->uri->segment(3); ?>" class="btn btn-success">Change</a></td>
+		</tr>
+                            </table>
+                            
+                        </div>
+                        <div class="mid_top_padding useraction">
+                            <h5>User Action</h5>
+                            <div class="userdetail"> 
+                                <div id="notif"></div>
+                                <div class="row">
+                                <form class="form-horizontal">
+
+
+                                    <fieldset>
+                                        <input type="hidden" name="id" id="id" value="<?php echo $this->uri->segment(3); ?>">
+                                        <input type="hidden" name="name" id="name" value="<?php echo $userdata->name; ?>">
+                                        <input type="hidden" name="address" id="address" value="<?php echo $userdata->address; ?>">
+                                        <input type="hidden" name="type" id="type" value="<?php echo $userdata->type; ?>">
+                                        <input type="hidden" name="referral_action" id="referral_action" value="<?php echo $userdata->referral_action; ?>">
+                                        <input type="hidden" name="referral_fee" id="referral_fee" value="<?php echo $userdata->referral_fee; ?>">
+
+                                            <div class="col-md-8 xs_padding">
+
+                                            <div class="col-md-8">
+                                                <select name="action" id="action" class="form-control">
+                                                    <option value="active" <?php if($userdata->user_status == 'active'){ echo 'selected';}?>>Active</option>
+                                                    <option value="block" <?php if($userdata->user_status == 'block'){ echo 'selected';}?>>Block</option>
+                                                </select>
+                                                
+                                            </div>
+                                            <div class="col-md-4">
+
+                                                <button type="button" id="submit" class="btn btn-primary mobile-button" onclick="return confirm('Are you sure to Update?')">Submit</button>
+
+
+                                            </div> 
+                                    </fieldset>
+                                </form> 
+                                </div>                                                        
+                            </div>
+                        </div>
+                        <div class="mid_top_padding blockaction">
+                            <h5>REFERRAL System</h5>
+                            <div class="userdetail"> 
+                                <div class="row">
+                                <form class="form-horizontal">
+                                <input type="hidden" name="id" id="id" value="<?php echo $this->uri->segment(3); ?>">
+                                    <div class="col-md-8 xs_padding">
+                                        <select name="referralfee" id="referralfee" class="form-control">
+                                            <option value="">..Select..</option>
+                                    <option value="0.1" <?php if($userdata->rate=='0.1')echo  ' selected="selected"' ; ?>>0.1</option>
+
+                                    <option value="0.15" <?php if($userdata->rate=='0.15')echo  ' selected="selected"' ; ?>>0.15</option>
+                                    <option value="0.2" <?php if($userdata->rate=='0.2')echo  ' selected="selected"' ; ?>>0.2</option>
+                                    <option value="0.25" <?php if($userdata->rate=='0.25')echo  ' selected="selected"' ; ?>>0.25</option>
+                                    <option value="0.45" <?php if($userdata->rate=='0.45')echo  ' selected="selected"' ; ?>>0.45</option>
+                                    <option value="0.5" <?php if($userdata->rate=='0.5')echo  ' selected="selected"' ; ?>>0.5</option>
+                                  
+
+
+                                          <!--   <option value="0.15">0.15</option>
+                                            <option value="0.2">0.2</option>
+                                            <option value="0.25">0.25</option>
+                                            <option value="0.45">0.45</option>
+                                            <option value="0.5">0.5</option> -->
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" id="submit_rate" class="btn btn-primary mobile-button" onclick="return confirm('Are you sure to Update?')">Submit</button>
+                                    </div>
+                                </form>   
+                                </div>                     
+                            </div>
+                        </div>
+                        <div class="mid_top_padding blockaction">
+                            <h5>REFERRAL</h5>
+                            <ul class="tabs">
+                                  <li class="active"><a href="#">Overview</a></li>
+                                  <li><a href="#">Referral Map</a></li>
+                                  <!-- add as many as you want -->
+                            </ul>
+                            <div id="tabcontainer">
+                                  <section>
+                                
+                                    <div class="mid_top_padding history">
+                                    <table class="table table-responsive">
+                                        <tr>
+                                            <td class="a1">1st Recommendee / Total</td>
+                                            <td class="a2"><?php echo $referral->totalrefer; ?>/<?php echo $referral->totalrefer; ?></td>
+                                            <td class="a1">Available amount</td>
+                                            <td class="a2"><?php echo number_format(($totalprofit->totalamtearn)-($totalwithdraw->totalreferralwithdraw),2); ?></td>
+                                        </tr>
+                                    </table>
+                                    </div>
+                                    <div class="small_top_padding history">
+			<p id="p1" style="display:none;">wowgo.io/register?referral=<?php echo $userdata->username; ?></p>
+                                    <table class="table table-responsive">
+                                        <tr>
+                                            <td class="a1">Referal URL</td>
+                                            <td class="a2">wowgo.io/register?referral=<?php echo $userdata->username; ?></td>
+                                            <td class="a1"><a onclick="copyToClipboard('#p1')" style="cursor:pointer;">Copy</a></td>
+                                        </tr>
+                                    </table>
+                                    </div>
+                                    <div class="small_top_padding history">
+                                        <p>BREAKDOWN</p>
+                                        <table class="table table-responsive">
+                                            <tr class="black">                                           
+                                                <td>TYPE</td>
+                                                <td>WOW</td>
+                                            </tr>
+                                            <tr class="a41">
+                                                <td>Profit</td>
+                                                <td><?php echo $totalprofit->totalamtearn; ?> wow</td>
+                                            </tr>
+                                            <tr class="a42">
+                                                <td>Withdraw</td>
+                                                <td><?php echo $totalwithdraw->totalreferralwithdraw; ?> wow</td>
+                                            </tr>
+                                            <tr class="a41">
+                                                <td>Available Amount</td>
+                                                <td><?php echo number_format(($totalprofit->totalamtearn)-($totalwithdraw->totalreferralwithdraw),2); ?> wow</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="small_top_padding">
+                                        <p>Referral Affiliated (<?php echo $userdata->rate; ?> %)</p>
+                                        <table class="table table-responsive">
+                                            <tr class="black">                                           
+                                                <td>ID</td>
+                                                <td>Betting Referral's Profit</td>
+                                                <td>Registered Date</td>
+                                            </tr>
+						<?php foreach($referralaffili->result() as $row): ?>
+                                            <tr class="a41">
+                                                <td><?php echo $row->user_id; ?></td>
+                                                <td><?php echo $row->totalamtearn; ?></td>
+                                                <td><?php echo $row->created_on; ?></td>
+                                            </tr>
+						<?php endforeach; ?>
+                                   
+                                        </table>
+                                    </div>
+                                    
+                                  </section>
+                                  <section>
+                                    <div class="mid_top_padding">
+                                        <div class="tree">
+                                            <ul>
+                                                <li>
+                                                    <?php echo $userdata->username; ?>
+                                                    <ul>    
+							<?php foreach($referralaffili->result() as $row):
+								?>
+                                                         <li>
+                                                            <?php echo $row->user_id; ?>
+                                                        </li>
+							<?php endforeach; ?>
+                                                       
+                                                        
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                  </section>
+                                  <!-- add as many as you want -->
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-8 history-time">                        
+                            <h5>Login History Time</h5>                            
+                            <div class="userdetail historytime">
+                            <table class="table table-responsive">
+                                <tr>
+                                    <th>User</th>
+                                    <th>Time</th>
+                                    <th>IP Address</th>
+                                    <th>Location</th>
+
+                                </tr>
+        <?php foreach($userlog->result() as $row): ?>
+                                <tr>                                    
+                                    <td><?php echo $row->name; ?></td>
+                                    <td><?php echo $row->login_time; ?></td>
+                                    <td><?php echo $row->ip; ?></td>                                    
+                                    <td><?php echo $row->location; ?></td>
+                                </tr>                              
+                <?php endforeach; ?>                                  
+                            </table>
+                        </div><!-- history time -->
+                        <h5 class="mid_top_padding xs_padding">Transaction</h5>
+                        <div class="userdetail transaction">
+                        
+                        <table class="table table-responsive">
+                            <tr>
+                         
+                                <th>Tx Hash</th>
+                         
+                                <th>Transaction Type</th>
+                                <th>Transaction Status</th>
+                                <th>Amount</th>
+            <th>Date</th>
+                            </tr>
+            <?php foreach($transaction->result() as $row): ?>
+                            <tr>
+
+                         
+                                <?php if(empty($row->withdrawal_id)) { ?>
+                    <td><?php echo $row->ethereum_deposit_txid; ?>
+                    <td>Deposit</td>
+            <?php   }else{ ?>
+                    <td><?php echo $row->withdrawal_id; ?></td>
+                    <td>Withdrawal</td>
+                <?php } ?>
+                                <td>
+				<?php if($row->status=='2'){ ?>
+					<p style="color:#f90606;">Cancelled</p>
+				<?php }else if($row->status=='1'){ ?>
+					<p style="color:green">Success</p>
+				<?php }else{ ?>
+					<p>In Progress</p>
+				<?php } ?>
+				</td>
+                                <td><?php echo $row->amount; ?></td>
+                                <td><?php echo $row->fundate; ?></td>
+                                
+                           
+                           
+                            </tr>
+            <?php endforeach; ?>
+                        </table>
+                        </div><!-- transaction -->
+                        <div class="mid_top_padding">
+                            <h5>Profit & Loss</h5>
+                            <div class="userdetail profitloss transaction">
+                            <table class="table table-responsive">
+                                <tr>
+                                    <th>USER</th>
+                                    <th>BET</th>
+                                    <th>Profit or Loss</th>
+                                    <th>Amount</th>
+                
+                                </tr>
+                <?php foreach($profitdata->result() as $row):
+            ?>
+                                <tr>
+                                    <td><?php echo $row->name; ?></td>
+                                    <td><?php echo $row->bet; ?></td>
+                                   <?php if(empty($row->cash_out)){ ?>
+                <td>Loss</td>
+                                    <td><?php echo $row->bet; ?></td>
+                <?php }else{ ?>
+                <td>Profit</td>
+                <td><?php echo $row->cash_out; ?></td>
+                <?php } ?>
+                
+                                </tr>
+            <?php endforeach; ?>
+                            </table>
+		<h3>Ajax country list</h3>
+    <table class="table">
+        <thead>
+        <tr>
+		<th>USER</th>
+		<th>BET</th>
+		<th>Profit or Loss</th>
+		<th>Amount</th>
+	</tr>
+        </thead>
+			<tbody id="profitajax_table">
+        </tbody>
+
+    </table>
+
+<button class="btn" id="profitload_more" data-val = "0">Load more..<img style="display: none" id="profitloader" src="http://www.trycatchclasses.com/code/demo/load-more-records-ci/asset/loader.GIF"> </button>
+                        </div>
+                        </div>
+                    </div>
+                    <!-- Tip Send Start -->
+		<div class="col-md-12 mid_top_padding">
+		    <div class="col-md-4">
+            		<h5>Daily Netprofit</h5>
+            		   <div class="userdetail netprofithistory transaction">
+            			<table class="table table-responsive">
+            				<tr>
+            					<th>Date</th>
+            					<th>Net Profit</th>
+            				</tr>
+            				<?php foreach($netprofitdata->result() as $row): ?>
+            				<tr>
+            					<td><?php echo $row->mydate; ?></td>
+            					<td><?php echo $row->netprofit; ?></td>
+            				
+            				</tr>
+            				<?php endforeach; ?>
+            			</table>
+            		    </div>
+                <div id="chart-container" class="mid_top_padding">
+                    <canvas id="graphCanvas"></canvas>
+                </div>
+            </div>
+                    <div class="col-md-8">
+                            <h5>Tip Send</h5>
+                            <div class="userdetail profitloss transaction">
+                            
+                    
+				<table class="table table-responsive">
+                            <thead>
+                                <tr>
+				
+				<th>From</th>
+				<th>To</th>
+				<th>Amount</th>
+                                <th>Commission</th>
+                                <th>Transaction ID</th>
+                                <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ajax_table">
+                            </tbody>
+
+                        </table>
+
+                        <button class="btn" id="load_more" data-val = "0">Show 30 rows more..<img style="display: none" id="loader" src="http://www.trycatchclasses.com/code/demo/load-more-records-ci/asset/loader.GIF"> </button>
+                        </div>
+                        </div>  
+		    
+		</div>
+
+                        <!-- Tip Send End -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>           
+<script>
+       
+
+        function showGraph()
+        {
+		var pageURL = window.location.href;
+var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+console.log(lastURLSegment);
+            {
+                $.post("data.php?userid="+lastURLSegment,
+
+                function (data)
+                {
+                    
+                     var name = [];
+                    var marks = [];
+
+                    for (var i in data) {
+                        name.push(data[i].mydate);
+                        marks.push(data[i].result);
+                    }
+
+                    var chartdata = {
+                        labels: name,
+                        datasets: [
+                            {
+                                label: 'Daily Netprofit',
+                                backgroundColor: '#305882',
+                                
+                                hoverBackgroundColor: '#CCCCCC',
+                                hoverBorderColor: '#666666',
+                                data: marks
+                            }
+                        ]
+                    };
+
+                    var graphTarget = $("#graphCanvas");
+
+                    var barGraph = new Chart(graphTarget, {
+                        type: 'bar',
+                        data: chartdata
+                    });
+                });
+            }
+        }
+        </script>
+
+<script>
+	function copyToClipboard(element) {
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val($(element).text()).select();
+  document.execCommand("copy");
+  $temp.remove();
+}
+	</script>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function(){
+        getcountry(0);
+
+        $("#load_more").click(function(e){
+            e.preventDefault();
+            var page = $(this).data('val');
+            getcountry(page);
+
+        });
+        
+    });
+
+    var getcountry = function(page){
+
+        $("#loader").show();
+	var pageURL=window.location.href;
+	var lastURLSegment=pageURL.substr(pageURL.lastIndexOf('/')+1);
+	data="userid="+lastURLSegment;	
+        $.ajax({
+            type:"POST",
+            url:'<?=base_url()?>'+"Admin/gettips/",
+            data: {page:page , userid:lastURLSegment}
+		
+        }).done(function(response){
+	
+            $("#ajax_table").append(response);
+            $("#loader").hide();
+            $('#load_more').data('val', ($('#load_more').data('val')+1));
+            scroll();
+        });
+    };
+
+    var scroll  = function(){
+        $('html, body').animate({
+            scrollTop: $('#load_more').offset().top
+        }, 1000);
+    };
+</script>
+<script>
+    $(document).ready(function(){
+        getprofit(0);
+
+        $("#profit_load_more").click(function(e){
+            e.preventDefault();
+            var page = $(this).data('val');
+            getprofit(page);
+
+        });
+        //getcountry();
+    });
+
+    var getprofit = function(page){
+        $("#profitloader").show();
+	var pageURL=window.location.href;
+	var lastURLSegment=pageURL.substr(pageURL.lastIndexOf('/')+1);
+	data="userid="+lastURLSegment;
+alert("hello");
+        $.ajax({
+		type:"POST",
+            url:'<?=base_url()?>'+"Admin/getprofitloss",
+            
+            data: {page:page,userid:lastURLSegment}
+        }).done(function(response){
+	alert(response);
+            $("#profitajax_table").append(response);
+            $("#profitloader").hide();
+            $('#profitload_more').data('val', ($('#profitload_more').data('val')+1));
+            scroll();
+        });
+    };
+
+    var scroll  = function(){
+        $('html, body').animate({
+            scrollTop: $('#profitload_more').offset().top
+        }, 1000);
+    };
+
+
+</script>
+    

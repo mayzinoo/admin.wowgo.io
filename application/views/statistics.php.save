@@ -1,0 +1,79 @@
+<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 mid_top_padding">
+	<div class="breadcome-list">
+	
+	<div class="row">
+<?php echo $deposit->created; ?>
+		<div class="product-status-wrap">
+		<div class="col-md-12 col-lg-12 col-sm-12 mid_padding">
+			
+				<div class="col-md-3 col-sm-12 xs_padding">
+					<h5>Start Date</label>
+					<input type="date" class="form-control" name="start_date" id="startdate">
+				</div>
+				<div class="col-md-3 col-sm-12 xs_padding">
+					<label>End Date</label>
+					<input type="date" class="form-control" name="end_date" id="enddate">
+				</div>
+				<div class="col-md-2 xs_padding">
+					<button class="btn btn-success mobile-button" onclick="searchbtn()">Filter</button>
+				</div>
+		
+		</div>
+		<div class="col-md-12 col-lg-12 col-sm-12">
+			<div class="col-md-3 col-sm-12">
+				<div class="totaldeposit">			
+					<h5>Total Deposit</h5>
+					<p><span id="deposit"><?php echo number_format($deposit->totaldeposit); ?></span> wow </p>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-12">
+				<div class="totalwithdraw">
+					<h5>Total withdrawal</h5>
+					<p>-<span id="withdraw"><?php echo number_format($withdraw->totalwithdraw); ?></span> wow</p>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-12">
+				<div class="totalbalance">
+					<h5>Total amount of users</h5>
+					<p><span id="balance"><?php echo number_format($balance->totalbalance); ?></span> wow</p>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-12">
+				<div class="totalnetprofit">
+					<h5>NET Profit</h5>
+					<p><span id="netprofit"><?php echo number_format($netprofit->totalnetprofit); ?></span> wow</p>
+				</div>
+			</div>
+		</div>
+		</div>
+	</div>
+	</div>
+</div>
+<script>
+	function thousands_separators(num)
+  {
+    var num_parts = num.toString().split(".");
+    num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return num_parts.join(".");
+  }
+	function searchbtn(){
+		var startdate=document.getElementById("startdate").value;
+		var enddate=document.getElementById("enddate").value;
+		
+		$.ajax({
+		type:"POST",
+		url: '<?=base_url()?>'+"Admin/statistics_search",
+		data: {startdate:startdate,enddate:enddate},
+		success:function(e)
+			{
+			var v=JSON.parse(e);
+			
+			$("#deposit").html(v.deposit);	
+			$("#withdraw").html(v.withdraw);
+			$("#balance").html(v.balance);
+			$("#netprofit").html(v.netprofit);
+			}
+		
+		});
+	}
+</script>
